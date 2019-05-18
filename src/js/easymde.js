@@ -1625,6 +1625,8 @@ EasyMDE.prototype.render = function (el) {
         placeholder: options.placeholder || el.getAttribute('placeholder') || '',
         styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : !isMobile(),
         configureMouse: configureMouse,
+        inputStyle: 'contenteditable',
+        spellcheck: true,
     });
 
     this.codemirror.getScrollerElement().style.minHeight = options.minHeight;
