@@ -4,7 +4,42 @@ All notable changes to easymde will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<!--## [Unreleased]-->
+## [Unreleased]
+### Added
+- Support for Node.js 14.
+- Preview without fullscreen (Thanks to [@nick-denry], [#196]).
+
+### Fixed
+- Fix cursor displayed position on activity ([#183]).
+- Checkboxes always have bullets in front of them ([#136]).
+- Save the text only when modifying the content of the easymde instance (Thanks to [@firm1], [#181]).
+
+## [2.10.1] - 2020-04-06
+### Fixed
+- Typescript error when entering certain strings for toolbar buttons ([#178]).
+
+## [2.10.0] - 2020-04-02
+### Added
+- `inputStyle` and `nativeSpellcheck` options to manage the native language of the browser (Thanks to [@firm1], [#143]).
+- Group buttons in drop-down lists by adding a sub-option `children` for the items in the toolbar (Thanks to [@firm1], [#141]).
+- `sanitizerFunction` option to allow custom HTML sanitizing in the markdown preview (Thanks to [@adamb70], [#147]).
+- Time formatting and custom text options for the autosave message (Thanks to [@dima-bzz], [#170]).
+### Changed
+- Delay before assuming that submit of the form as failed is `autosave.submit_delay` instead of `autosave.delay` (Thanks to [@Situphen], [#139]).
+- Add `watch` task for gulp (Thanks to [@A-312], [#150]).
+### Fixed
+- Issue with Marked when using IE11 and webpack (Thanks to [@felipefdl], [#169]).
+- Updated codemirror to version 5.52.2 (Thanks to [@A-312], [#173]).
+- Editor displaying on top of other elements on a webpage (Thanks to [@StefKors], [#175]).
+
+## [2.9.0] - 2020-01-13
+### Added
+- Missing minHeight option in type definition (Thanks to [@t49tran], [#123]).
+- Other missing type definitions ([#126]).
+
+### Changed
+- The editor will remove its saved contents when the editor is emptied, allowing to reload a default value (Thanks to [@Situphen], [#132]).
+
 ## [2.8.0] - 2019-08-20
 ### Added
 - Upload images functionality (Thanks to [@roipoussiere] and [@JeroenvO], [#71], [#101]).
@@ -119,6 +154,10 @@ Project forked from [SimpleMDE](https://github.com/sparksuite/simplemde-markdown
 - Cursor not always showing in "text" mode over the edit field
 
 <!-- Linked issues -->
+[#183]: https://github.com/Ionaru/easy-markdown-editor/issues/183
+[#178]: https://github.com/Ionaru/easy-markdown-editor/issues/178
+[#136]: https://github.com/Ionaru/easy-markdown-editor/issues/136
+[#126]: https://github.com/Ionaru/easy-markdown-editor/issues/126
 [#99]: https://github.com/Ionaru/easy-markdown-editor/issues/99
 [#45]: https://github.com/Ionaru/easy-markdown-editor/issues/45
 [#44]: https://github.com/Ionaru/easy-markdown-editor/issues/44
@@ -131,6 +170,18 @@ Project forked from [SimpleMDE](https://github.com/sparksuite/simplemde-markdown
 [#9]: https://github.com/Ionaru/easy-markdown-editor/issues/9
 
 <!-- Linked PRs -->
+[#196]: https://github.com/Ionaru/easy-markdown-editor/pull/196
+[#175]: https://github.com/Ionaru/easy-markdown-editor/pull/175
+[#173]: https://github.com/Ionaru/easy-markdown-editor/pull/173
+[#170]: https://github.com/Ionaru/easy-markdown-editor/pull/170
+[#169]: https://github.com/Ionaru/easy-markdown-editor/pull/169
+[#150]: https://github.com/Ionaru/easy-markdown-editor/pull/150
+[#147]: https://github.com/Ionaru/easy-markdown-editor/pull/147
+[#143]: https://github.com/Ionaru/easy-markdown-editor/pull/143
+[#141]: https://github.com/Ionaru/easy-markdown-editor/pull/141
+[#139]: https://github.com/Ionaru/easy-markdown-editor/pull/139
+[#132]: https://github.com/Ionaru/easy-markdown-editor/pull/132
+[#123]: https://github.com/Ionaru/easy-markdown-editor/pull/123
 [#109]: https://github.com/Ionaru/easy-markdown-editor/pull/109
 [#106]: https://github.com/Ionaru/easy-markdown-editor/pull/106
 [#101]: https://github.com/Ionaru/easy-markdown-editor/pull/101
@@ -144,6 +195,14 @@ Project forked from [SimpleMDE](https://github.com/sparksuite/simplemde-markdown
 [#19]: https://github.com/Ionaru/easy-markdown-editor/pull/19
 
 <!-- Linked users -->
+[@nick-denry]: https://github.com/nick-denry
+[@StefKors]: https://github.com/StefKors
+[@felipefdl]: https://github.com/felipefdl
+[@A-312]: https://github.com/A-312
+[@dima-bzz]: https://github.com/dima-bzz
+[@firm1]: https://github.com/firm1
+[@Situphen]: https://github.com/Situphen
+[@t49tran]: https://github.com/t49tran
 [@richtera]: https://github.com/richtera
 [@jfly]: https://github.com/jfly
 [@sperezp]: https://github.com/sperezp
@@ -162,7 +221,10 @@ Project forked from [SimpleMDE](https://github.com/sparksuite/simplemde-markdown
 [@sne11ius]: https://github.com/sne11ius
 
 <!-- Linked versions -->
-[Unreleased]: https://github.com/Ionaru/easy-markdown-editor/compare/2.8.0...HEAD
+[Unreleased]: https://github.com/Ionaru/easy-markdown-editor/compare/2.10.1...HEAD
+[2.10.1]: https://github.com/Ionaru/easy-markdown-editor/compare/2.10.0...2.10.1
+[2.10.0]: https://github.com/Ionaru/easy-markdown-editor/compare/2.9.0...2.10.0
+[2.9.0]: https://github.com/Ionaru/easy-markdown-editor/compare/2.8.0...2.9.0
 [2.8.0]: https://github.com/Ionaru/easy-markdown-editor/compare/2.7.0...2.8.0
 [2.7.0]: https://github.com/Ionaru/easy-markdown-editor/compare/2.6.1...2.7.0
 [2.6.1]: https://github.com/Ionaru/easy-markdown-editor/compare/2.6.0...2.6.1

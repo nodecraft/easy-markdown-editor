@@ -20,12 +20,52 @@
 // SOFTWARE.
 
 /// <reference types="codemirror"/>
+/// <reference types="marked"/>
+
+interface ArrayOneOrMore<T> extends Array<T> {
+    0: T
+}
+
+type ToolbarButton =
+    'bold'
+    | 'italic'
+    | 'quote'
+    | 'unordered-list'
+    | 'ordered-list'
+    | 'link'
+    | 'image'
+    | 'strikethrough'
+    | 'code'
+    | 'table'
+    | 'redo'
+    | 'heading'
+    | 'undo'
+    | 'heading-bigger'
+    | 'heading-smaller'
+    | 'heading-1'
+    | 'heading-2'
+    | 'heading-3'
+    | 'clean-block'
+    | 'horizontal-rule'
+    | 'preview'
+    | 'side-by-side'
+    | 'fullscreen'
+    | 'guide';
 
 declare namespace EasyMDE {
+
+    interface TimeFormatOptions {
+        locale?: string | string[];
+        format?: Intl.DateTimeFormatOptions;
+    }
+
     interface AutoSaveOptions {
         enabled?: boolean;
         delay?: number;
+        submit_delay?: number;
         uniqueId: string;
+        timeFormat?: TimeFormatOptions;
+        text?: string;
     }
 
     interface BlockStyleOptions {
@@ -47,9 +87,17 @@ declare namespace EasyMDE {
         underscoresBreakWords?: boolean;
     }
 
+    interface PromptTexts {
+        image?: string;
+        link?: string;
+    }
+
     interface RenderingOptions {
+        codeSyntaxHighlighting?: boolean;
+        hljs?: any;
+        markedOptions?: marked.MarkedOptions;
+        sanitizerFunction?: (html: string) => string;
         singleLineBreaks?: boolean;
-        codeSyntaxHighlighting: boolean;
     }
 
     interface Shortcuts {
@@ -75,6 +123,15 @@ declare namespace EasyMDE {
         className: string;
         defaultValue: (element: HTMLElement) => void;
         onUpdate: (element: HTMLElement) => void;
+    }
+
+    interface ToolbarDropdownIcon {
+        name: string;
+        children: ArrayOneOrMore<ToolbarIcon | ToolbarButton>;
+        className: string;
+        title: string;
+        noDisable?: boolean;
+        noMobile?: boolean;
     }
 
     interface ToolbarIcon {
@@ -114,6 +171,8 @@ declare namespace EasyMDE {
         initialValue?: string;
         insertTexts?: InsertTextOptions;
         lineWrapping?: boolean;
+        minHeight?: string;
+        maxHeight?: string;
         parsingConfig?: ParsingOptions;
         placeholder?: string;
         previewClass?: string | ReadonlyArray<string>;
@@ -121,12 +180,15 @@ declare namespace EasyMDE {
         promptURLs?: boolean;
         renderingConfig?: RenderingOptions;
         shortcuts?: Shortcuts;
-        showIcons?: ReadonlyArray<string>;
+        showIcons?: ReadonlyArray<ToolbarButton>;
         spellChecker?: boolean;
+        inputStyle?: 'textarea' | 'contenteditable';
+        nativeSpellcheck?: boolean;
+        sideBySideFullscreen?: boolean;
         status?: boolean | ReadonlyArray<string | StatusBarItem>;
         styleSelectedText?: boolean;
         tabSize?: number;
-        toolbar?: boolean | ReadonlyArray<string | ToolbarIcon>;
+        toolbar?: boolean | ReadonlyArray<'|' | ToolbarButton | ToolbarIcon | ToolbarDropdownIcon>;
         toolbarTips?: boolean;
         onToggleFullScreen?: (goingIntoFullScreen: boolean) => void;
         theme?: string;
@@ -140,6 +202,9 @@ declare namespace EasyMDE {
         imageTexts?: ImageTextsOptions;
         errorMessages?: ImageErrorTextsOptions;
         errorCallback?: (errorMessage: string) => void;
+
+        promptTexts?: PromptTexts;
+        syncSideBySidePreviewScroll?: boolean;
     }
 }
 

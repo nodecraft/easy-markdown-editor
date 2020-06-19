@@ -25,18 +25,18 @@ The editor is entirely customizable, from theming to toolbar buttons and javascr
 
 - [Install EasyMDE](#install-easymde)
 - [How to use](#how-to-use)
-  - [Loading the editor](#loading-the-editor)
-  - [Editor functions](#editor-functions)
+	- [Loading the editor](#loading-the-editor)
+	- [Editor functions](#editor-functions)
 - [Configuration](#configuration)
-  - [Options list](#options-list)
-  - [Options example](#options-example)
-  - [Toolbar icons](#toolbar-icons)
-  - [Toolbar customization](#toolbar-customization)
-  - [Keyboard shortcuts](#keyboard-shortcuts)
+	- [Options list](#options-list)
+	- [Options example](#options-example)
+	- [Toolbar icons](#toolbar-icons)
+	- [Toolbar customization](#toolbar-customization)
+	- [Keyboard shortcuts](#keyboard-shortcuts)
 - [Advanced use](#advanced-use)
-  - [Event handling](#event-handling)
-  - [Removing EasyMDE from text area](#removing-easymde-from-text-area)
-  - [Useful methods](#useful-methods)
+	- [Event handling](#event-handling)
+	- [Removing EasyMDE from text area](#removing-easymde-from-text-area)
+	- [Useful methods](#useful-methods)
 - [How it works](#how-it-works)
 - [SimpleMDE fork](#simplemde-fork)
 - [Hacking EasyMDE](#hacking-easymde)
@@ -120,7 +120,10 @@ easyMDE.value('New input for **EasyMDE**');
 - **autosave**: *Saves the text that's being written and will load it back in the future. It will forget the text when the form it's contained in is submitted.*
   - **enabled**: If set to `true`, saves the text automatically. Defaults to `false`.
   - **delay**: Delay between saves, in milliseconds. Defaults to `10000` (10s).
+  - **submit_delay**: Delay before assuming that submit of the form failed and saving the text, in milliseconds. Defaults to `autosave.delay` or `10000` (10s).
   - **uniqueId**: You must set a unique string identifier so that EasyMDE can autosave. Something that separates this from other instances of EasyMDE elsewhere on your website.
+  - **timeFormat**: Set DateTimeFormat. More information see [DateTimeFormat instances](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat). Default `locale: en-US, format: hour:minute`.
+  - **text**: Set text for autosave.
 - **blockStyles**: Customize how certain buttons that style blocks of text behave.
   - **bold**: Can be set to `**` or `__`. Defaults to `**`.
   - **code**: Can be set to  ```` ``` ```` or `~~~`.  Defaults to ```` ``` ````.
@@ -137,6 +140,7 @@ easyMDE.value('New input for **EasyMDE**');
   - table
 - **lineWrapping**: If set to `false`, disable line wrapping. Defaults to `true`.
 - **minHeight**: Sets the minimum height for the composition area, before it starts auto-growing. Should be a string containing a valid CSS value like `"500px"`. Defaults to `"300px"`.
+- **maxHeight**: Sets fixed height for the composition area. `minHeight` option will be ignored. Should be a string containing a valid CSS value like `"500px"`. Defaults to `undefined`.
 - **onToggleFullScreen**: A function that gets called when the editor's full screen mode is toggled. The function will be passed a boolean as parameter, `true` when the editor is currently going into full screen mode, or `false`.
 - **parsingConfig**: Adjust settings for parsing the Markdown during editing (not previewing).
   - **allowAtxHeaderWithoutSpace**: If set to `true`, will render headers without a space after the `#`. Defaults to `false`.
@@ -177,9 +181,13 @@ easyMDE.value('New input for **EasyMDE**');
   - **hljs**: An injectible instance of [highlight.js](https://github.com/isagalaev/highlight.js). If you don't want to rely on the global namespace (`window.hljs`), you can provide an instance here. Defaults to `undefined`.
   - **markedOptions**: Set the internal Markdown renderer's [options](https://marked.js.org/#/USING_ADVANCED.md#options). Other `renderingConfig` options will take precedence.
   - **singleLineBreaks**: If set to `false`, disable parsing GFM single line breaks. Defaults to `true`.
+  - **sanitizerFunction**: Custom function for sanitizing the HTML output of markdown renderer.
 - **shortcuts**: Keyboard shortcuts associated with this instance. Defaults to the [array of shortcuts](#keyboard-shortcuts).
 - **showIcons**: An array of icon names to show. Can be used to show specific icons hidden by default without completely customizing the toolbar.
 - **spellChecker**: If set to `false`, disable the spell checker. Defaults to `true`.
+- **inputStyle**: `textarea` or `contenteditable`. Defaults to `textarea` for desktop and `contenteditable` for mobile. `contenteditable` option is necessary to enable nativeSpellcheck.
+- **nativeSpellcheck**: If set to `false`, disable native spell checker. Defaults to `true`.
+- **sideBySideFullscreen**: If set to `false`, allows side-by-side editing without going into fullscreen. Defaults to `true`.
 - **status**: If set to `false`, hide the status bar. Defaults to the array of built-in status bar items.
   - Optionally, you can set an array of status bar items to include, and in what order. You can even define your own custom status bar items.
 - **styleSelectedText**: If set to `false`, remove the `CodeMirror-selectedtext` class from selected lines. Defaults to `true`.
@@ -201,6 +209,18 @@ var editor = new EasyMDE({
 		enabled: true,
 		uniqueId: "MyUniqueID",
 		delay: 1000,
+		submit_delay: 5000,
+		timeFormat: {
+			locale: 'en-US',
+			format: {
+				year: 'numeric',
+				month: 'long',
+				day: '2-digit',
+				hour: '2-digit',
+				minute: '2-digit',
+			},
+		},
+		text: "Autosaved: "
 	},
 	blockStyles: {
 		bold: "__",
@@ -225,10 +245,10 @@ var editor = new EasyMDE({
 		underscoresBreakWords: true,
 	},
 	placeholder: "Type here...",
-	
+
 	previewClass: "my-custom-styling",
 	previewClass: ["my-custom-styling", "more-custom-styling"],
-	
+
 	previewRender: function(plainText) {
 		return customMarkdownParser(plainText); // Returns HTML from a custom parser
 	},
@@ -247,6 +267,10 @@ var editor = new EasyMDE({
 	renderingConfig: {
 		singleLineBreaks: false,
 		codeSyntaxHighlighting: true,
+		sanitizerFunction: function(renderedHTML) {
+			// Using DOMPurify and only allowing <b> tags
+			return DOMPurify.sanitize(renderedHTML, {ALLOWED_TAGS: ['b']})
+		},
 	},
 	shortcuts: {
 		drawTable: "Cmd-Alt-T"
@@ -266,6 +290,7 @@ var editor = new EasyMDE({
 		},
 	}], // Another optional usage, with a custom status bar item that counts keystrokes
 	styleSelectedText: false,
+	sideBySideFullscreen: false,
 	syncSideBySidePreviewScroll: false,
 	tabSize: 4,
 	toolbar: false,
@@ -342,6 +367,46 @@ var easyMDE = new EasyMDE({
 });
 ```
 
+Put some buttons on dropdown menu
+
+```Javascript
+var easyMDE = new EasyMDE({
+	toolbar: [{
+                name: "heading",
+                action: EasyMDE.toggleHeadingSmaller,
+                className: "fa fa-header",
+                title: "Headers",
+            },
+            "|",
+            {
+                name: "others",
+                className: "fa fa-blind",
+                title: "others buttons",
+                children: [
+                    {
+                        name: "image",
+                        action: EasyMDE.drawImage,
+                        className: "fa fa-picture-o",
+                        title: "Image",
+                    },
+                    {
+                        name: "quote",
+                        action: EasyMDE.toggleBlockquote,
+                        className: "fa fa-percent",
+                        title: "Quote",
+                    },
+                    {
+                        name: "link",
+                        action: EasyMDE.drawLink,
+                        className: "fa fa-link",
+                        title: "Link",
+                    }
+                ]
+            },
+		// [, ...]
+	]
+});
+```
 
 ### Keyboard shortcuts
 

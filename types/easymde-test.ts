@@ -5,6 +5,7 @@ const editor = new EasyMDE({
     autoDownloadFontAwesome: false,
     element: document.getElementById('mdEditor')!,
     hideIcons: ['side-by-side', 'fullscreen'],
+    inputStyle: 'textarea',
     shortcuts: {
         drawTable: 'Cmd-Alt-T',
         toggleFullScreen: null
@@ -15,6 +16,7 @@ const editor = new EasyMDE({
         console.log('FullscreenToggled', full);
     },
     theme: 'someOtherTheme',
+    minHeight: '200px'
 });
 
 // Editor functions
@@ -35,29 +37,61 @@ EasyMDE.toggleItalic = (editor: EasyMDE) => {
 const editor2 = new EasyMDE({
     autoDownloadFontAwesome: undefined,
     previewClass: ['my-custom-class', 'some-other-class'],
-    toolbar: [{
-        name: 'bold',
-        action: EasyMDE.toggleBold,
-        className: 'fa fa-bolt',
-        title: 'Bold',
-    }, '|', { // Separator
-        name: 'alert',
-        action: (editor: EasyMDE) => {
-            alert('This is from a custom button action!');
-            // Custom functions have access to the `editor` instance.
+    nativeSpellcheck: true,
+    inputStyle: 'contenteditable',
+    toolbar: [
+        {
+            name: 'bold',
+            action: EasyMDE.toggleBold,
+            className: 'fa fas fa-bolt',
+            title: 'Bold'
         },
-        className: 'fa fa-star',
-        title: 'A Custom Button',
-        noDisable: undefined,
-        noMobile: false,
-    }, '|', {
-        name: 'link',
-        action: 'https://github.com/Ionaru/easy-markdown-editor',
-        className: 'fa fab fa-github',
-        title: 'A Custom Link',
-        noDisable: true,
-        noMobile: true,
-    }]
+        '|',
+        'undo',
+        {
+            name: 'alert',
+            action: (editor: EasyMDE) => {
+                alert('This is from a custom button action!');
+                // Custom functions have access to the `editor` instance.
+            },
+            className: 'fa fas fa-star',
+            title: 'A Custom Button',
+            noDisable: undefined,
+            noMobile: false
+        },
+        '|',
+        {
+            name: 'link',
+            action: 'https://github.com/Ionaru/easy-markdown-editor',
+            className: 'fa fab fa-github',
+            title: 'A Custom Link',
+            noDisable: true,
+            noMobile: true
+        },
+        'preview',
+        {
+            name: 'links',
+            className: 'fa fas fa-arrow-down',
+            title: 'A Custom Link',
+            children: [
+                {
+                    name: 'link',
+                    action: 'https://github.com/Ionaru/easy-markdown-editor',
+                    className: 'fa fab fa-github',
+                    title: 'A Custom Link',
+                    noDisable: true,
+                    noMobile: true
+                },
+                'preview',
+                {
+                    name: 'bold',
+                    action: EasyMDE.toggleBold,
+                    className: 'fa fas fa-bold',
+                    title: 'Bold'
+                },
+            ]
+        }
+    ]
 });
 
 editor2.clearAutosavedValue();
@@ -80,11 +114,11 @@ const editorImages = new EasyMDE({
         noFileGiven: 'Please select a file',
         typeNotAllowed: 'This file type is not allowed!',
         fileTooLarge: 'Image too big',
-        importError: 'Something went oops!',
+        importError: 'Something went oops!'
     },
-    errorCallback: (errorMessage) => {
+    errorCallback: errorMessage => {
         console.error(errorMessage);
-    },
+    }
 });
 
 const editorImagesCustom = new EasyMDE({
@@ -109,9 +143,56 @@ const editorImagesCustom = new EasyMDE({
         noFileGiven: 'Please select a file',
         typeNotAllowed: 'This file type is not allowed!',
         fileTooLarge: 'Image too big',
-        importError: 'Something went oops!',
+        importError: 'Something went oops!'
     },
-    errorCallback: (errorMessage) => {
+    errorCallback: errorMessage => {
         console.error(errorMessage);
     },
-  });
+    renderingConfig: {
+        codeSyntaxHighlighting: true,
+        markedOptions: {
+            silent: true,
+            highlight(code: string, lang: string, callback?: (error: (any | undefined), code: string) => void): string {
+                return 'something'
+            },
+        },
+    },
+    promptTexts: {
+        image: 'Insert URL'
+    },
+    syncSideBySidePreviewScroll: true
+});
+
+new EasyMDE({
+    sideBySideFullscreen: true,
+    autosave: {
+        enabled: true,
+        delay: 2000,
+        submit_delay: 10000,
+        uniqueId: 'abc',
+        timeFormat: {
+            locale: 'en-GB',
+            format: {
+                month: 'long',
+            }
+        },
+        text: 'Stored: ',
+    }
+});
+
+new EasyMDE({
+    sideBySideFullscreen: false,
+    maxHeight: '500px',
+    toolbar: [
+        'bold',
+        'italic',
+        'heading',
+        '|',
+        'quote',
+        'unordered-list',
+        'ordered-list',
+        'table',
+        '|',
+        'link'
+    ]
+});
